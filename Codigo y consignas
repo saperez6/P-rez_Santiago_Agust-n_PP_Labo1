@@ -1,0 +1,146 @@
+'''
+Se dispone de un archivo con datos acerca de los servicios de un taller de costura, que tiene el
+siguiente formato:
+id_servicio, descripción (del servicio), tipo (1-MINORISTA, 2-MAYORISTA, 3-EXPORTAR),
+precioUnitario, cantidad, totalServicio
+
+Ejemplo: {
+            "id_servicio": "50",
+            "descripcion": "ruedo pantalon",
+            "tipo": "1",
+            "precioUnitario": "250",
+            "cantidad": "2",
+            "totalServicio": "0"
+        }
+Se deberá realizar un programa que permita el análisis de dicho archivo y sea capaz de generar
+nuevos archivos de salida de formato similar filtrados por varios criterios:
+El programa contará con el siguiente menú:
+
+1) Cargar archivo: Se pedirá el nombre del archivo y se cargarán en una lista los elementos
+del mismo.
+2) Imprimir lista: Se imprimirá por pantalla la tabla (en forma de columnas) con los datos de los
+servicios.
+3) Asignar totales: Se deberá hacer uso de una función lambda que asignará a cada servicio el
+total calculado (totalServicio) de la siguiente forma: cantidad x precioUnitario.
+4) Filtrar por tipo: Se deberá generar un archivo igual al original, pero donde solo aparezcan
+servicios del tipo seleccionado.
+5) Mostrar servicios: Se deberá mostrar por pantalla un listado de los servicios ordenados por
+descripción de manera ascendente.
+6) Guardar servicios: Se deberá guardar el listado del punto anterior en un archivo de tipo json.
+7) Salir.
+
+
+Requerimientos del desarrollo.
+nota: el código deberá tener comentarios con la documentación de cada una de las funciones y
+respetar las reglas de estilo de la cátedra.
+nota bis: separar las funciones en distintas bibliotecas.
+Para nota de aprobación, se deberán realizar como mínimo 3 puntos.
+Para nota de promoción se deberán realizar como mínimo 4 puntos.
+'''
+
+import json
+with open("data.json") as file:
+    servicios = json.load(file)
+#Se carga el archivo de data.json
+
+def menu():
+    #Se crea un menu, de 7 opciones en base a los puntos solicitados y una variable respuesta para 
+    # printear lo elegido
+    #El nombre de 'servicios' se utilizara como referencia el resto del ejecicio
+    servicios = "data.json"
+
+
+    while True:
+        print("\n Menú de opciones")
+        print("1. cargar archivo y elementos")
+        print("2. Imprimir listas")
+        print("3. Totales")
+        print("4. Filtrar por tipo")
+        print("5. Mostrar servicios")
+        print("6. Guardar")
+        print("7. Salir")
+
+        opcion = input("Seleccione una opción (1-7): ")
+
+        if opcion == "1":
+            resultado = cargar_datos(servicios)
+            print(resultado)
+        elif opcion == "2":
+            resultado = imprimir_listas(servicios)
+            print(resultado)
+        elif opcion == "3":
+            resultado = imprimir_totales(servicios)
+            print(resultado)
+        elif opcion == "4":
+            resultado = tipo(servicios)
+            print(resultado)
+        elif opcion == "5":
+            resultado = mostrar_servicios(servicios)
+            print(resultado)
+        elif opcion == "6":
+            resultado = guardar(servicios)
+            print(resultado)
+        elif opcion == "7":
+            break
+        else:
+            print("Opcion no valida")  
+        
+
+# Función para cargar datos con load
+def cargar_datos():
+    with open("data.json", "r") as servicios:
+        datos = json.load(servicios)
+    return datos
+
+# Funcion para imprimir las listas:
+def imprimir_listas():    
+    print(servicios)
+    
+# Funcion para cargar el total en lambda pasando las cantidades y el precio del archivo para hacer el calculo y printearlo
+def imprimir_totales():
+    cantidad = json["cantidad"]
+    precio_unitario = json["precioUnitario"]
+    print(lambda: cantidad*precio_unitario, " es el total")
+
+# Funcion para filtrar por tipo
+def tipo(tipo, cantidades):
+    #Usando un match de conteo para calcular cuantos tipos hay
+    contador_1 = 0
+    contador_2 = 0
+    contador_3 = 0
+    match json["tipo"]:
+        case "1":
+            contador_1 += 1
+        case "2":
+            contador_2 += 1       
+        case "3":
+            contador_3 += 1
+    #Esos contadores pasaran a un archivo de la siguiente forma:
+    try:
+        with open(contador_1, contador_2, contador_3, "w") as archivo:
+            archivo.write(cantidades)
+        print(f"Se creó el archivo: {tipo}")
+        return True
+    except FileExistsError:
+        print(f"Error al crear el archivo: {tipo}")
+        return False
+
+# Funcion para mostrar servicios
+def mostrar_servicios():
+    #Mediante sorted y un lambda ordenamos de forma ascendente el numero de servicio
+    return sorted(servicios, key=lambda json: json["id_servicio"])
+
+# Funcion para guardar en un archivo json
+def guardar(nombre_archivo, contenido):
+    nombre_archivo = input("Nombre del archivo")
+    #la variable 'nombre_archivo' se usa para que quien use el codigo pueda darle un nombre al archivo,
+    # mientras que 'contenido' para que se use de refencencia
+    try:
+        with open(nombre_archivo, "w") as archivo:
+            archivo.write(contenido)
+        print(f"Se creó el archivo: {nombre_archivo}")
+        return True
+    except FileExistsError:
+        print(f"Error al crear el archivo: {nombre_archivo}")
+        return False
+    
